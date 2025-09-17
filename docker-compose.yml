@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+      - ./uploads:/app/uploads
+    environment:
+      - FLASK_ENV=development
+      - DEEPSEEK_API_KEY=sk-6f4684b7385745d0ac62f6f3ed103291
+    restart: unless-stopped
+
+volumes:
+  uploads:
