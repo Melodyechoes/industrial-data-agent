@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工业数据分析系统-登录</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
+        .login-container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 300px; }
+        h2 { text-align: center; color: #1890ff; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #555; }
+        input { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+        button { width: 100%; padding: 0.75rem; background-color: #1890ff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+        button:hover { background-color: #147bd1; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>工业数据分析系统</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">用户名：</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">密码：</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">登录</button>
+        </form>
+        <div id="errorMsg" style="color: #ff4d4f; margin-top: 1rem; text-align: center;"></div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+
+            try {
+                const response = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+                const data = await response.json();
+                if (data.success) {
+                    errorMsg.textContent = '';
+                    localStorage.setItem('isLoggedIn', 'true');
+                    window.location.href = '/main';
+                } else {
+                    errorMsg.textContent = data.message;
+                }
+            } catch (err) {
+                errorMsg.textContent = '登录失败，请检查用户名密码';
+            }
+        });
+    </script>
+</body>
+</html>

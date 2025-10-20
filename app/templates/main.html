@@ -1,0 +1,2258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工业数据分析系统-主页面</title>
+    <!-- 添加 Prism.js 代码高亮库 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<style>
+        :root {
+            --primary-color: #10a37f;
+            --primary-dark: #0d8a6a;
+            --secondary-color: #1a73e8;
+            --dark-text: #202124;
+            --light-text: #5f6368;
+            --lighter-text: #80868b;
+            --background: #ffffff;
+            --card-bg: #ffffff;
+            --border: #dadce0;
+            --input-bg: #f8f9fa;
+            --hover-bg: #f5f7fa;
+            --success-bg: #e6f4ea;
+            --success-text: #137333;
+            --error-bg: #fce8e6;
+            --error-text: #c5221f;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-text);
+        }
+        
+        h2 {
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            font-size: 1.5rem;
+        }
+        
+        h3 {
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            display: flex;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            padding: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+        
+        .nav-item {
+            flex: 1;
+            padding: 1rem 2rem;
+            color: var(--light-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .nav-item:hover {
+            color: var(--dark-text);
+            background-color: var(--hover-bg);
+        }
+        
+        .nav-item.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+        
+        .card:hover {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 表单样式 */
+        .upload-section {
+            margin-bottom: 2rem;
+        }
+        
+        #uploadForm {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        #fileInput {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--dark-text);
+            font-size: 1rem;
+        }
+        
+        #fileInput::file-selector-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-secondary {
+            background-color: var(--input-bg);
+            color: var(--dark-text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            border-color: #c0c4c8;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .file-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .file-table th, .file-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .file-table th {
+            background-color: transparent;
+            color: var(--light-text);
+            font-weight: 500;
+        }
+        
+        .file-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .file-table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+        
+        .file-name {
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        .file-name:hover {
+            color: var(--primary-dark);
+        }
+        
+        .error-msg {
+            color: var(--error-text);
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: var(--error-bg);
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .success-msg {
+            color: var(--success-text);
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: var(--success-bg);
+            border-radius: 8px;
+            border: 1px solid #c3e6cb;
+        }
+        .save-model-button-container {
+            background-color: #e8f4f8;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        #fileContentView {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #fileContentView > div {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow: auto;
+            width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        #fileContent {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--dark-text);
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: var(--input-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            max-height: 60vh;
+            overflow: auto;
+        }
+        
+        /* Agent问答模块样式 */
+        #agentModule {
+            display: none;
+        }
+        
+        .file-selector {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        #fileSelector {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--dark-text);
+            font-size: 1rem;
+        }
+        
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+        }
+        
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background-color: var(--input-bg);
+        }
+        
+        .message {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            max-width: 85%;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .agent-message {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border);
+        }
+        
+        .chat-input input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--dark-text);
+            font-size: 1rem;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .timestamp {
+            font-size: 0.75rem;
+            color: var(--lighter-text);
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            padding: 2rem;
+            color: var(--light-text);
+        }
+        
+        .welcome-message h3 {
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        
+        .example-queries {
+            margin-top: 1rem;
+            text-align: left;
+        }
+        
+        .example-queries ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .example-queries li {
+            padding: 0.5rem 0;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+        
+        .example-queries li:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        /* 模型管理模块样式 */
+        #modelModule {
+            display: none;
+        }
+        
+        .model-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .model-table th, .model-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .model-table th {
+            background-color: transparent;
+            color: var(--light-text);
+            font-weight: 500;
+        }
+        
+        .model-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .model-table tbody tr:hover {
+            background-color: var(--hover-bg);
+        }
+        
+        .apply-model-section {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--dark-text);
+            font-size: 1rem;
+        }
+        
+        .result-success {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        details {
+            margin-top: 0.5rem;
+        }
+        
+        details summary {
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        pre {
+            background-color: var(--input-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        /* 保存模型对话框 */
+        #saveModelDialog {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        
+        #saveModelDialog > div {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        #saveModelForm {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        #saveModelForm input {
+            padding: 0.75rem 1rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--dark-text);
+            font-size: 1rem;
+        }
+        
+        .dialog-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .navbar {
+                flex-direction: column;
+            }
+            
+            #uploadForm {
+                flex-direction: column;
+            }
+            
+            .file-selector {
+                flex-direction: column;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+        }
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+        }
+        
+        .modal-content {
+            background-color: #ffffff;
+            margin: 10% auto;
+            padding: 0;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 500px;
+            animation: modalopen 0.3s ease-out;
+        }
+        
+        @keyframes modalopen {
+            from {opacity: 0; transform: translateY(-60px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .modal-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #dadce0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #202124;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+        
+        .close {
+            color: #5f6368;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .close:hover {
+            background-color: #f1f3f4;
+            color: #202124;
+        }
+        
+        .modal-body {
+            padding: 20px 24px;
+        }
+        
+        .modal-body p {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #202124;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f8f9fa;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #10a37f;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2);
+        }
+        
+        .help-text {
+            background-color: #f1f8ff;
+            border-left: 4px solid #1a73e8;
+            padding: 12px 16px;
+            margin-top: 16px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .help-text p {
+            margin: 0;
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.5;
+        }
+        
+        .modal-footer {
+            padding: 16px 24px 20px;
+            border-top: 1px solid #dadce0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .btn-primary {
+            background-color: #10a37f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0d8a6a;
+            box-shadow: 0 2px 6px rgba(16, 163, 127, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f1f3f4;
+            border-color: #c6c9ce;
+        }
+                .code-block-container {
+            position: relative;
+            background-color: #f6f8fa;
+            border-radius: 8px;
+            border: 1px solid #d0d7de;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        
+        .code-lang-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: rgba(175, 184, 193, 0.2);
+            color: #57606a;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-bottom-left-radius: 6px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+        
+        .code-block {
+            padding: 16px;
+            overflow-x: auto;
+            background-color: #f6f8fa;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.45;
+            white-space: pre;
+        }
+        
+        /* 如果 Prism.js 加载成功，这些样式会被覆盖 */
+        .code-block-container:hover .copy-button {
+            opacity: 1;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(27, 31, 35, 0.15);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            color: #57606a;
+            transition: all 0.2s ease;
+            opacity: 0;
+        }
+        
+        .copy-button:hover {
+            background-color: rgba(255, 255, 255, 1);
+            border-color: rgba(27, 31, 35, 0.3);
+        }
+        
+        .save-button-container {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .save-model-button {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        /* Prism.js 样式 */
+        pre[class*="language-"] {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+        }
+        
+        code[class*="language-"] {
+            background: transparent;
+            color: #24292f;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            direction: ltr;
+            text-align: left;
+            white-space: pre;
+            word-spacing: normal;
+            word-break: normal;
+            line-height: 1.5;
+            -moz-tab-size: 4;
+            -o-tab-size: 4;
+            tab-size: 4;
+            -webkit-hyphens: none;
+            -moz-hyphens: none;
+            -ms-hyphens: none;
+            hyphens: none;
+        }
+        
+        /* 代码高亮样式 */
+        .token.comment,
+        .token.prolog,
+        .token.doctype,
+        .token.cdata {
+            color: #6e7781;
+        }
+        
+        .token.punctuation {
+            color: #24292f;
+        }
+        
+        .token.property,
+        .token.tag,
+        .token.boolean,
+        .token.number,
+        .token.constant,
+        .token.symbol,
+        .token.deleted {
+            color: #0550ae;
+        }
+        
+        .token.selector,
+        .token.attr-name,
+        .token.string,
+        .token.char,
+        .token.builtin,
+        .token.inserted {
+            color: #0a3069;
+        }
+        
+        .token.operator,
+        .token.entity,
+        .token.url,
+        .language-css .token.string,
+        .style .token.string {
+            color: #0550ae;
+        }
+        
+        .token.atrule,
+        .token.attr-value,
+        .token.keyword {
+            color: #cf222e;
+        }
+        
+        .token.function {
+            color: #8250df;
+        }
+        
+        .token.regex,
+        .token.important,
+        .token.variable {
+            color: #0a3069;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>工业数据分析Agent系统</h1>
+            <p>基于DeepSeek大语言模型的智能数据分析平台</p>
+        </header>
+        
+        <!-- 导航栏 -->
+        <div class="navbar">
+            <div class="nav-item active" onclick="switchModule('dataManagement')">工业数据管理</div>
+            <div class="nav-item" onclick="switchModule('agentChat')">Agent问答</div>
+            <div class="nav-item" onclick="switchModule('modelManagement')">模型管理</div>
+        </div>
+                
+        <!-- 工业数据管理模块 -->
+        <div id="dataManagementModule">
+            <div class="card">
+                <h2>数据文件管理</h2>
+                <div class="upload-section">
+                    <form id="uploadForm">
+                        <input type="file" id="fileInput" accept=".csv" required>
+                        <button type="submit">上传文件</button>
+                    </form>
+                    <div id="uploadMsg"></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>已上传文件</h3>
+                <table class="file-table">
+                    <thead>
+                        <tr>
+                            <th>文件名</th>
+                            <th>大小</th>
+                            <th>上传时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileTableBody">
+                    </tbody>
+                </table>
+                <div id="fileListMsg"></div>
+            </div>
+        </div>
+        
+        <!-- Agent问答模块 -->
+        <div id="agentModule">
+            <div class="card">
+                <h2>智能数据分析助手</h2>
+                <div class="file-selector">
+                    <label for="fileSelector">选择分析文件：</label>
+                    <select id="fileSelector">
+                        <option value="">请选择文件</option>
+                    </select>
+                    <button class="btn-secondary" onclick="refreshFileList()">刷新文件列表</button>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message agent-message">
+                            <div class="welcome-message">
+                                <h3>欢迎使用Agent助手</h3>
+                                <p>我是基于DeepSeek大语言模型的智能助手，可以帮助您分析工业数据</p>
+                                <div class="example-queries">
+                                    <p>您可以尝试以下问题：</p>
+                                    <ul>
+                                        <li onclick="useExampleQuery('请用python计算文件中数据的均值、标准差、最大值和最小值')">请用python计算文件中数据的均值、标准差、最大值和最小值</li>
+                                        <li onclick="useExampleQuery('请做相关性分析')">请做相关性分析</li>
+                                        <li onclick="useExampleQuery('请检测数据中的异常值')">请检测数据中的异常值</li>
+                                        <li onclick="useExampleQuery('使用线性回归模型建立关系')">使用线性回归模型建立关系</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="userInput" placeholder="请输入您的需求，例如：请对数据做相关性分析...">
+                        <button onclick="sendMessage()">发送</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- 模型管理模块 -->
+        <div id="modelModule">
+            <div class="card">
+                <h2>机器学习模型管理</h2>
+                <div class="model-list">
+                    <div class="header">
+                        <h3>已保存的模型</h3>
+                        <button class="btn-secondary" onclick="refreshModelList()">刷新模型列表</button>
+                    </div>
+                    <table class="model-table">
+                        <thead>
+                            <tr>
+                                <th>模型名称</th>
+                                <th>模型类型</th>
+                                <th>目标列</th>
+                                <th>创建时间</th>
+                                <th>准确率</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modelTableBody">
+                            <!-- 模型列表将通过JavaScript动态填充 -->
+                        </tbody>
+                    </table>
+                    <div id="modelListMsg"></div>
+                </div>
+                
+                <div class="apply-model-section">
+                    <h3>应用模型</h3>
+                    <div class="form-group">
+                        <label for="modelSelector">选择模型:</label>
+                        <select id="modelSelector">
+                            <option value="">请选择模型</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dataFileSelector">选择数据文件:</label>
+                        <select id="dataFileSelector">
+                            <option value="">请选择文件</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="applyModel()">应用模型</button>
+                    <div id="modelResult"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文件内容查看模态框 -->
+    <div id="fileContentView">
+        <div>
+            <h3 id="viewFileName"></h3>
+            <pre id="fileContent"></pre>
+            <button onclick="closeFileView()" style="margin-top: 1rem;">关闭</button>
+        </div>
+    </div>
+    
+    <!-- 目标列选择对话框 -->
+    <div id="targetColumnDialog" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>选择目标列</h3>
+                <span class="close" onclick="closeTargetColumnDialog()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>请输入用于预测的目标列名:</p>
+                <input type="text" id="targetColumnInput" placeholder="例如: TEY" required class="form-input">
+                <div class="help-text">
+                    <p>目标列是您希望模型预测的值。例如，在燃气轮机数据中，如果您想预测能源产出，目标列可能是"TEY"。</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeTargetColumnDialog()">取消</button>
+                <button type="button" id="confirmTargetColumn" class="btn-primary">确认</button>
+            </div>
+        </div>
+    </div>
+    <!-- 保存模型对话框 -->
+    <div id="saveModelDialog">
+        <div>
+            <h3>保存模型</h3>
+            <form id="saveModelForm">
+                <input type="text" id="modelNameInput" placeholder="请输入模型名称" required>
+                <div class="dialog-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeSaveModelDialog()">取消</button>
+                    <button type="submit" id="confirmSaveModel">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // 页面加载时获取文件列表
+        window.onload = function() {
+            fetchFileList();
+            refreshFileList();
+            refreshModelList();
+        };
+
+        // 切换模块
+        function switchModule(module) {
+            // 更新导航栏激活状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 显示选中的模块
+            if (module === 'dataManagement') {
+                document.getElementById('dataManagementModule').style.display = 'block';
+                document.getElementById('agentModule').style.display = 'none';
+                document.getElementById('modelModule').style.display = 'none';
+            } else if (module === 'agentChat') {
+                document.getElementById('dataManagementModule').style.display = 'none';
+                document.getElementById('agentModule').style.display = 'block';
+                document.getElementById('modelModule').style.display = 'none';
+            } else if (module === 'modelManagement') {
+                document.getElementById('dataManagementModule').style.display = 'none';
+                document.getElementById('agentModule').style.display = 'none';
+                document.getElementById('modelModule').style.display = 'block';
+                refreshModelList();
+                refreshFileListForModel(); // 为模型应用刷新文件列表
+            }
+        }
+
+        // 使用示例查询
+        function useExampleQuery(query) {
+            document.getElementById('userInput').value = query;
+        }
+
+        // 获取文件列表（数据管理模块）
+        async function fetchFileList() {
+            const fileTableBody = document.getElementById('fileTableBody');
+            const fileListMsg = document.getElementById('fileListMsg');
+            fileTableBody.innerHTML = '';
+            fileListMsg.textContent = '';
+
+            try {
+                const response = await fetch('/api/files');
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '获取文件列表失败');
+
+                if (data.files.length === 0) {
+                    fileListMsg.textContent = '暂无上传文件';
+                    fileListMsg.className = 'error-msg';
+                    return;
+                }
+
+                data.files.forEach(file => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="file-name" onclick="viewFile('${file.name}')">${file.name}</td>
+                        <td>${formatSize(file.size)}</td>
+                        <td>${new Date(file.upload_time * 1000).toLocaleString()}</td>
+                        <td><button class="btn-secondary" onclick="deleteFile('${file.name}')">删除</button></td>
+                    `;
+                    fileTableBody.appendChild(row);
+                });
+            } catch (err) {
+                fileListMsg.textContent = `错误：${err.message}`;
+                fileListMsg.className = 'error-msg';
+            }
+        }
+
+        // 刷新文件选择列表（Agent模块）
+        async function refreshFileList() {
+            const fileSelector = document.getElementById('fileSelector');
+            // 保留当前选择
+            const currentValue = fileSelector.value;
+            
+            try {
+                const response = await fetch('/api/files');
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '获取文件列表失败');
+
+                // 清空选项
+                fileSelector.innerHTML = '<option value="">请选择文件</option>';
+                
+                // 添加文件选项
+                data.files.forEach(file => {
+                    const option = document.createElement('option');
+                    option.value = file.name;
+                    option.textContent = file.name;
+                    fileSelector.appendChild(option);
+                });
+                
+                // 恢复之前的选择（如果文件仍然存在）
+                if (currentValue && data.files.some(file => file.name === currentValue)) {
+                    fileSelector.value = currentValue;
+                }
+            } catch (err) {
+                console.error('刷新文件列表失败：', err.message);
+            }
+        }
+
+        // 上传文件
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('fileInput');
+            const uploadMsg = document.getElementById('uploadMsg');
+            const file = fileInput.files[0];
+            uploadMsg.textContent = '';
+            uploadMsg.className = '';
+
+            if (!file) {
+                uploadMsg.textContent = '请选择文件';
+                uploadMsg.className = 'error-msg';
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const response = await fetch('/api/upload', { method: 'POST', body: formData });
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '上传失败');
+
+                uploadMsg.textContent = `上传成功！文件名：${data.filename}，列数：${data.columns.length}，行数：${data.row_count}`;
+                uploadMsg.className = 'success-msg';
+                fileInput.value = ''; // 清空文件选择
+                fetchFileList(); // 刷新文件列表
+                refreshFileList(); // 刷新Agent模块的文件列表
+                refreshFileListForModel(); // 刷新模型应用的文件列表
+            } catch (err) {
+                uploadMsg.textContent = `上传失败：${err.message}`;
+                uploadMsg.className = 'error-msg';
+            }
+        });
+
+        // 删除文件
+        async function deleteFile(filename) {
+            const confirmDelete = confirm(`确定要删除文件 ${filename} 吗？`);
+            if (!confirmDelete) return;
+
+            try {
+                const response = await fetch(`/api/files/${encodeURIComponent(filename)}`, { method: 'DELETE' });
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '删除失败');
+
+                alert('文件删除成功');
+                fetchFileList(); // 刷新文件列表
+                refreshFileList(); // 刷新Agent模块的文件列表
+                refreshFileListForModel(); // 刷新模型应用的文件列表
+            } catch (err) {
+                alert(`删除失败：${err.message}`);
+            }
+        }
+
+        // 格式化文件大小
+        function formatSize(bytes) {
+            if (bytes >= 1024 * 1024) {
+                return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+            } else if (bytes >= 1024) {
+                return `${(bytes / 1024).toFixed(2)} KB`;
+            } else {
+                return `${bytes} B`;
+            }
+        }
+
+        // 查看文件内容
+        async function viewFile(filename) {
+            try {
+                const response = await fetch(`/api/files/${encodeURIComponent(filename)}`);
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '获取文件内容失败');
+
+                const modal = document.getElementById('fileContentView');
+                const fileName = document.getElementById('viewFileName');
+                const content = document.getElementById('fileContent');
+
+                fileName.textContent = `文件内容：${filename}`;
+                content.textContent = data.content;
+                modal.style.display = 'flex';
+            } catch (err) {
+                alert(`查看文件失败：${err.message}`);
+            }
+        }
+
+        // 关闭文件查看模态框
+        function closeFileView() {
+            document.getElementById('fileContentView').style.display = 'none';
+        }
+        
+        // 发送消息到Agent
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            const fileSelector = document.getElementById('fileSelector');
+            const selectedFile = fileSelector.value;
+            
+            if (!message) {
+                alert('请输入分析需求');
+                return;
+            }
+            
+            // 添加用户消息到聊天窗口
+            addMessage(message, 'user');
+            userInput.value = '';
+            
+            // 显示正在处理的消息
+            const processingMsgId = addMessage('正在处理您的请求，请稍候...', 'agent', true);
+            
+            // 调用后端API与DeepSeek进行交互
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message,
+                    filename: selectedFile,
+                    conversation_id: window.currentConversationId || ''
+                })
+            })
+            .then(response => {
+                // 检查响应状态
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('收到非JSON响应');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 移除处理中消息
+                if (processingMsgId) {
+                    const processingMsg = document.getElementById(processingMsgId);
+                    if (processingMsg) {
+                        processingMsg.remove();
+                    }
+                }
+                
+                if (data.error) {
+                    addMessage('处理请求时出错: ' + data.error, 'agent');
+                } else {
+                    // 保存会话ID
+                    window.currentConversationId = data.conversation_id;
+                    // 解析回复并格式化显示
+                    parseAndDisplayResponse(data.reply);
+                    
+                    // 如果有保存的模型信息，显示成功消息
+                    if (data.saved_model) {
+                        addMessage(`模型已保存: ${data.saved_model.model_filename}`, 'agent');
+                    }
+                    
+                    // 如果是数据分析请求且有选中文件，自动生成图表
+                    if ((message.includes('分析') || message.includes('统计') || message.includes('可视化')) && selectedFile) {
+                        generateAndDisplayCharts(selectedFile);
+                    }
+                }
+            })
+            .catch(error => {
+                // 移除处理中消息
+                if (processingMsgId) {
+                    const processingMsg = document.getElementById(processingMsgId);
+                    if (processingMsg) {
+                        processingMsg.remove();
+                    }
+                }
+                
+                // 更详细的错误处理
+                let errorMessage = '未知错误';
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    errorMessage = '网络连接错误: 无法连接到服务器，请检查服务是否正常运行';
+                } else if (error.message.includes('HTTP error')) {
+                    errorMessage = `服务器错误: ${error.message}`;
+                } else if (error.message.includes('JSON')) {
+                    errorMessage = '服务器响应格式错误，请检查后端服务';
+                } else {
+                    errorMessage = `处理请求时出错: ${error.message}`;
+                }
+                
+                addMessage(errorMessage, 'agent');
+                console.error('详细错误信息:', error);
+            });
+        }
+        
+        // 生成并显示图表
+        function generateAndDisplayCharts(filename) {
+            // 显示正在生成图表的消息
+            const processingMsgId = addMessage('正在生成数据可视化图表...', 'agent', true);
+            
+            // 调用后端API生成图表
+            fetch('/api/generate_charts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    filename: filename
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 移除处理中消息
+                if (processingMsgId) {
+                    const processingMsg = document.getElementById(processingMsgId);
+                    if (processingMsg) {
+                        processingMsg.remove();
+                    }
+                }
+                
+                if (data.error) {
+                    addMessage('生成图表时出错: ' + data.error, 'agent');
+                } else if (data.success) {
+                    // 显示图表
+                    displayCharts(data.charts);
+                }
+            })
+            .catch(error => {
+                // 移除处理中消息
+                if (processingMsgId) {
+                    const processingMsg = document.getElementById(processingMsgId);
+                    if (processingMsg) {
+                        processingMsg.remove();
+                    }
+                }
+                addMessage('生成图表时网络错误: ' + error.message, 'agent');
+            });
+        }
+
+        // 解析并显示AI回复
+        function parseAndDisplayResponse(reply) {
+            // 简单解析回复，将代码块和普通文本分开显示
+            const codeBlockRegex = /```(?:python)?([\s\S]*?)```/g;
+            let lastIndex = 0;
+            let match;
+            
+            // 如果没有代码块，直接显示所有内容
+            if (!reply.includes('```')) {
+                addMessage(reply, 'agent');
+                return;
+            }
+            
+            // 收集所有内容块（文本和代码）
+            const contentBlocks = [];
+            
+            while ((match = codeBlockRegex.exec(reply)) !== null) {
+                // 添加代码块之前的文本
+                if (match.index > lastIndex) {
+                    const text = reply.substring(lastIndex, match.index).trim();
+                    if (text) {
+                        contentBlocks.push({ type: 'text', content: text });
+                    }
+                }
+                
+                // 收集代码块
+                const code = match[1].trim();
+                if (code) {
+                    contentBlocks.push({ type: 'code', content: code });
+                }
+                
+                lastIndex = match.index + match[0].length;
+            }
+            
+            // 添加最后剩余的文本
+            if (lastIndex < reply.length) {
+                const text = reply.substring(lastIndex).trim();
+                if (text) {
+                    contentBlocks.push({ type: 'text', content: text });
+                }
+            }
+            
+            // 合并相邻的代码块
+            const mergedBlocks = [];
+            let accumulatedCode = '';
+            
+            contentBlocks.forEach((block, index) => {
+                if (block.type === 'code') {
+                    // 累积代码块
+                    if (accumulatedCode) {
+                        accumulatedCode += '\n\n' + block.content;
+                    } else {
+                        accumulatedCode = block.content;
+                    }
+                } else {
+                    // 如果有累积的代码，先添加它
+                    if (accumulatedCode) {
+                        mergedBlocks.push({ type: 'code', content: accumulatedCode });
+                        accumulatedCode = '';
+                    }
+                    // 添加文本块
+                    mergedBlocks.push(block);
+                }
+            });
+            
+            // 处理最后可能剩余的代码块
+            if (accumulatedCode) {
+                mergedBlocks.push({ type: 'code', content: accumulatedCode });
+            }
+            
+            // 检查模型训练相关代码
+            let hasModelTrainingCode = false;
+            let detectedModelType = 'linear_regression';
+            let modelTrainingCompleted = false;
+            
+            // 遍历所有块查找模型训练代码
+            mergedBlocks.forEach(block => {
+                if (block.type === 'code') {
+                    const code = block.content;
+                    // 检查是否为模型训练相关代码
+                    const isLinearRegressionModel = code.includes('LinearRegression');
+                    const isRandomForestModel = code.includes('RandomForest');
+                    const isDecisionTreeModel = code.includes('DecisionTree');
+                    const isModelTrained = code.includes('.fit(') || code.includes('model.fit');
+                    
+                    if ((isLinearRegressionModel || isRandomForestModel || isDecisionTreeModel) && isModelTrained) {
+                        hasModelTrainingCode = true;
+                        
+                        // 检测模型类型
+                        if (isLinearRegressionModel) {
+                            detectedModelType = 'linear_regression';
+                        } else if (isRandomForestModel) {
+                            detectedModelType = 'random_forest';
+                        } else if (isDecisionTreeModel) {
+                            detectedModelType = 'decision_tree';
+                        }
+                    }
+                } else if (block.type === 'text') {
+                    const text = block.content;
+                    // 检查是否包含模型训练完成的关键词
+                    if (text.includes("模型训练完成") || text.includes("训练已完成") || text.includes("训练结束")) {
+                        modelTrainingCompleted = true;
+                    }
+                }
+            });
+            
+            // 显示内容块
+            let hasShownSaveButton = false;
+            
+            mergedBlocks.forEach((block, index) => {
+                if (block.type === 'text') {
+                    addMessage(block.content, 'agent');
+                } else if (block.type === 'code') {
+                    // 检查当前代码块是否包含模型训练代码
+                    const code = block.content;
+                    const isLinearRegressionModel = code.includes('LinearRegression');
+                    const isRandomForestModel = code.includes('RandomForest');
+                    const isDecisionTreeModel = code.includes('DecisionTree');
+                    const isModelTrained = code.includes('.fit(') || code.includes('model.fit');
+                    const isModelTrainingCode = (isLinearRegressionModel || isRandomForestModel || isDecisionTreeModel) && isModelTrained;
+                    
+                    // 判断是否在最后一个模型相关代码块
+                    const isLastModelBlock = (() => {
+                        // 查找后续是否有模型训练代码块
+                        for (let i = index + 1; i < mergedBlocks.length; i++) {
+                            if (mergedBlocks[i].type === 'code') {
+                                const nextCode = mergedBlocks[i].content;
+                                const isNextLinearRegression = nextCode.includes('LinearRegression');
+                                const isNextRandomForest = nextCode.includes('RandomForest');
+                                const isNextDecisionTree = nextCode.includes('DecisionTree');
+                                const isNextModelTrained = nextCode.includes('.fit(') || nextCode.includes('model.fit');
+                                
+                                if ((isNextLinearRegression || isNextRandomForest || isNextDecisionTree) && isNextModelTrained) {
+                                    return false;
+                                }
+                            }
+                        }
+                        return isModelTrainingCode;
+                    })();
+                    
+                    if (hasModelTrainingCode && isLastModelBlock) {
+                        addCodeBlockWithSaveButton(block.content, 'agent', detectedModelType);
+                        hasShownSaveButton = true;
+                        
+                        // 如果模型训练完成，显示保存按钮
+                        if (modelTrainingCompleted) {
+                            setTimeout(() => showSaveModelButton(detectedModelType), 100);
+                        }
+                    } else {
+                        addCodeBlock(block.content, 'agent');
+                    }
+                }
+            });
+            
+            // 兜底措施：如果检测到模型训练但未显示保存按钮，则添加一个
+            if (hasModelTrainingCode && !hasShownSaveButton) {
+                setTimeout(() => {
+                    if (!document.querySelector('.save-model-button-container')) {
+                        showSaveModelButton(detectedModelType);
+                    }
+                }, 200);
+            }
+            
+            // 如果明确提到训练完成但没有模型代码，也显示保存按钮
+            if (modelTrainingCompleted && !hasModelTrainingCode) {
+                setTimeout(() => {
+                    if (!document.querySelector('.save-model-button-container')) {
+                        showSaveModelButton(detectedModelType);
+                    }
+                }, 200);
+            }
+        }
+
+        // 显示保存模型按钮（直接在聊天界面中）
+        function showSaveModelButton(modelType = 'linear_regression') {
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // 检查是否已经存在保存按钮
+            if (document.querySelector('.save-model-button-container')) {
+                return;
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message agent-message save-model-button-container';
+            messageDiv.style.backgroundColor = '#e8f4f8';
+            messageDiv.style.borderLeft = '4px solid var(--primary-color)';
+            messageDiv.style.marginTop = '10px';
+            
+            // 添加提示文本
+            const infoText = document.createElement('p');
+            infoText.innerHTML = '<strong>🎉 模型训练已完成！</strong><br>您可以保存该模型以供后续使用：';
+            infoText.style.marginBottom = '10px';
+            infoText.style.color = '#202124';
+            
+            // 添加保存按钮
+            const saveButton = document.createElement('button');
+            saveButton.innerHTML = '<i>💾</i> 保存模型';
+            saveButton.className = 'btn-secondary';
+            saveButton.style.fontSize = '14px';
+            saveButton.style.padding = '10px 20px';
+            saveButton.style.display = 'flex';
+            saveButton.style.alignItems = 'center';
+            saveButton.style.gap = '6px';
+            saveButton.onclick = function() {
+                // 保存当前模型上下文信息
+                window.currentModelContext = {
+                    file: document.getElementById('fileSelector').value,
+                    modelType: modelType
+                };
+                showTargetColumnDialog(); // 显示目标列选择对话框
+            };
+            
+            // 添加说明文本
+            const helpText = document.createElement('p');
+            helpText.textContent = '保存的模型可以在"模型管理"模块中查看和应用';
+            helpText.style.fontSize = '12px';
+            helpText.style.color = '#666';
+            helpText.style.marginTop = '8px';
+            
+            messageDiv.appendChild(infoText);
+            messageDiv.appendChild(saveButton);
+            messageDiv.appendChild(helpText);
+            
+            // 添加时间戳
+            const timestamp = document.createElement('div');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString();
+            timestamp.style.marginTop = '10px';
+            
+            messageDiv.appendChild(timestamp);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // 显示保存模型对话框
+        function showSaveModelDialog() {
+            document.getElementById('saveModelDialog').style.display = 'flex';
+        }
+        
+        // 关闭保存模型对话框
+        function closeSaveModelDialog() {
+            document.getElementById('saveModelDialog').style.display = 'none';
+        }
+        
+    // 页面加载完成后添加事件监听器
+    document.addEventListener('DOMContentLoaded', function() {
+        // 目标列确认按钮事件
+        if (document.getElementById('confirmTargetColumn')) {
+            document.getElementById('confirmTargetColumn').addEventListener('click', function() {
+                const targetColumn = document.getElementById('targetColumnInput').value.trim();
+                
+                if (!targetColumn) {
+                    alert('请输入目标列名');
+                    return;
+                }
+                
+                // 保存目标列到上下文
+                window.currentModelContext.targetColumn = targetColumn;
+                closeTargetColumnDialog();
+                showSaveModelDialog();
+            });
+        }
+        
+        // 目标列输入框回车事件
+        if (document.getElementById('targetColumnInput')) {
+            document.getElementById('targetColumnInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('confirmTargetColumn').click();
+                }
+            });
+        }
+        
+        // 保存模型表单提交
+        if (document.getElementById('saveModelForm')) {
+            document.getElementById('saveModelForm').addEventListener('submit', async function(e) {
+                e.preventDefault(); // 阻止表单默认提交行为
+                console.log("开始保存模型"); // 添加调试信息
+                
+                const modelName = document.getElementById('modelNameInput').value.trim();
+                console.log("模型名称:", modelName); // 添加调试信息
+                
+                if (!modelName) {
+                    alert('请输入模型名称');
+                    return;
+                }
+                
+                if (!window.currentModelContext || !window.currentModelContext.file) {
+                    alert('无法获取模型上下文信息');
+                    return;
+                }
+                
+                // 获取目标列（如果未设置则使用默认值）
+                const targetColumn = window.currentModelContext.targetColumn || 'target';
+                // 获取模型类型（如果未设置则使用默认值）
+                const modelType = window.currentModelContext.modelType || 'linear_regression';
+                console.log("目标列:", targetColumn); // 添加调试信息
+                console.log("模型类型:", modelType); // 添加调试信息
+                
+                try {
+                    // 获取当前选择的文件
+                    const selectedFile = window.currentModelContext.file;
+                    console.log("选中的文件:", selectedFile); // 添加调试信息
+                    
+                    // 显示保存中提示
+                    const saveButton = document.querySelector('#saveModelForm button[type="submit"]');
+                    const originalText = saveButton.textContent;
+                    saveButton.textContent = '保存中...';
+                    saveButton.disabled = true;
+                    
+                    // 调用后端API进行模型分析和保存
+                    const response = await fetch('/api/analyze', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            filename: selectedFile,
+                            analysis_type: 'predict',
+                            target_column: targetColumn,  // 使用用户指定的目标列而不是硬编码的'target'
+                            model_type: modelType,  // 使用检测到的模型类型
+                            save_model: true,
+                            model_name: modelName
+                        })
+                    });
+                    
+                    // 恢复按钮状态
+                    saveButton.textContent = originalText;
+                    saveButton.disabled = false;
+                    
+                    console.log("后端响应状态:", response.status); // 添加调试信息
+                    
+                    // 检查响应是否为JSON格式
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        const errorText = await response.text();
+                        console.log("非JSON响应内容:", errorText); // 添加调试信息
+                        throw new Error(`服务器返回了非JSON响应: ${errorText.substring(0, 200)}...`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log("后端响应数据:", data); // 添加调试信息
+                    
+                    if (response.ok && data.success && data.result && data.result.saved_model) {
+                        const savedModel = data.result.saved_model;
+                        alert(`模型 "${modelName}" 保存成功！\n模型文件 (PKL格式): ${savedModel.model_filename_pkl}\n模型文件 (DAT格式): ${savedModel.model_filename_dat}\n信息文件: ${savedModel.info_filename}`);
+                        closeSaveModelDialog();
+                        document.getElementById('modelNameInput').value = '';
+                        if (document.getElementById('targetColumnInput')) {
+                            document.getElementById('targetColumnInput').value = ''; // 清空目标列输入
+                        }
+                        refreshModelList(); // 刷新模型列表
+                    } else if (!response.ok) {
+                        throw new Error(data.error || '保存模型失败');
+                    } else {
+                        throw new Error('保存模型失败：响应格式不正确');
+                    }
+                } catch (err) {
+                    console.error("保存模型时出错:", err); // 添加调试信息
+                    alert(`保存模型失败：${err.message}`);
+                }
+            });
+        }
+        
+        // 模型名称输入框回车事件
+        if (document.getElementById('modelNameInput')) {
+            document.getElementById('modelNameInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.querySelector('#saveModelForm button[type="submit"]').click();
+                }
+            });
+        }
+    });
+
+        // 目标列确认按钮事件
+    document.getElementById('confirmTargetColumn').addEventListener('click', function() {
+        const targetColumn = document.getElementById('targetColumnInput').value.trim();
+        
+        if (!targetColumn) {
+            alert('请输入目标列名');
+            return;
+        }
+        
+        // 保存目标列到上下文
+        window.currentModelContext.targetColumn = targetColumn;
+        closeTargetColumnDialog();
+        showSaveModelDialog();
+    });
+    
+       // 添加消息到聊天窗口
+        function addMessage(text, sender, isProcessing = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            const msgId = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.textContent = text;
+            
+            // 添加时间戳
+            const timestamp = document.createElement('div');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString();
+            messageDiv.appendChild(timestamp);
+            
+            if (isProcessing) {
+                messageDiv.id = msgId;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            return isProcessing ? msgId : null;
+        }
+            
+        // 添加代码块到聊天窗口（带保存按钮）
+        function addCodeBlockWithSaveButton(code, sender, modelType = 'linear_regression') {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const codeContainer = document.createElement('div');
+            codeContainer.className = 'code-block-container';
+            
+            // 添加语言标签
+            const langLabel = document.createElement('div');
+            langLabel.className = 'code-lang-label';
+            langLabel.textContent = 'python';
+            codeContainer.appendChild(langLabel);
+            
+            // 添加代码内容
+            const codeDiv = document.createElement('div');
+            codeDiv.className = 'code-block';
+            // 使用 innerText 而不是 innerHTML 来避免 HTML 解析问题
+            codeDiv.innerText = code;
+            codeContainer.appendChild(codeDiv);
+            
+            // 添加复制按钮
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-button';
+            copyButton.innerHTML = '<i>📋</i> 复制';
+            copyButton.onclick = function() {
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalText = copyButton.innerHTML;
+                    copyButton.innerHTML = '<i>✓</i> 已复制';
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                    }, 2000);
+                });
+            };
+            codeContainer.appendChild(copyButton);
+            
+            // 添加保存按钮容器
+            const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'save-button-container';
+            
+            // 添加保存按钮
+            const saveButton = document.createElement('button');
+            saveButton.innerHTML = '<i>💾</i> 保存模型';
+            saveButton.className = 'btn-secondary save-model-button';
+            saveButton.onclick = function() {
+                // 保存当前模型上下文信息
+                window.currentModelContext = {
+                    code: code,
+                    file: document.getElementById('fileSelector').value,
+                    modelType: modelType  // 保存模型类型
+                };
+                showTargetColumnDialog(); // 显示目标列选择对话框
+            };
+            
+            buttonContainer.appendChild(saveButton);
+            
+            // 添加时间戳
+            const timestamp = document.createElement('div');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString();
+            
+            messageDiv.appendChild(codeContainer);
+            messageDiv.appendChild(buttonContainer);
+            messageDiv.appendChild(timestamp);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        // 添加代码块到聊天窗口（不带保存按钮）
+        function addCodeBlock(code, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const codeContainer = document.createElement('div');
+            codeContainer.className = 'code-block-container';
+            
+            // 添加语言标签
+            const langLabel = document.createElement('div');
+            langLabel.className = 'code-lang-label';
+            langLabel.textContent = 'python';
+            codeContainer.appendChild(langLabel);
+            
+            // 添加代码内容
+            const codeDiv = document.createElement('div');
+            codeDiv.className = 'code-block';
+            
+            // 尝试使用Prism.js进行高亮，如果失败则使用简单高亮
+            try {
+                if (typeof Prism !== 'undefined' && Prism.highlight) {
+                    codeDiv.innerHTML = Prism.highlight(code, Prism.languages.python, 'python');
+                } else {
+                    codeDiv.innerHTML = simplePythonHighlight(code);
+                }
+            } catch (e) {
+                // 如果高亮失败，直接显示代码
+                codeDiv.innerText = code;
+            }
+            
+            codeContainer.appendChild(codeDiv);
+            
+            // 添加复制按钮
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-button';
+            copyButton.innerHTML = '<i>📋</i> 复制';
+            copyButton.onclick = function() {
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalText = copyButton.innerHTML;
+                    copyButton.innerHTML = '<i>✓</i> 已复制';
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                    }, 2000);
+                });
+            };
+            codeContainer.appendChild(copyButton);
+            
+            // 添加时间戳
+            const timestamp = document.createElement('div');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString();
+            
+            messageDiv.appendChild(codeContainer);
+            messageDiv.appendChild(timestamp);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        // 获取模型列表
+        async function refreshModelList() {
+            const modelTableBody = document.getElementById('modelTableBody');
+            const modelListMsg = document.getElementById('modelListMsg');
+            modelTableBody.innerHTML = '';
+            modelListMsg.textContent = '';
+
+            try {
+                const response = await fetch('/api/models');
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '获取模型列表失败');
+
+                if (data.models && data.models.length > 0) {
+                    data.models.forEach(model => {
+                        const row = document.createElement('tr');
+                        
+                        row.innerHTML = `
+                            <td>${model.model_name || '未命名'}</td>
+                            <td>${model.model_type || '未知'}</td>
+                            <td>${model.target_column || '未知'}</td>
+                            <td>${model.created_at || '未知'}</td>
+                            <td>${(model.score !== undefined && model.score !== null) ? (model.score * 100).toFixed(2) + '%' : '未知'}</td>
+                            <td>
+                                <button class="btn-danger" onclick="deleteModel('${model.model_filename}')">删除</button>
+                            </td>
+                        `;
+                        modelTableBody.appendChild(row);
+                    });
+                    
+                    // 更新模型选择器
+                    updateModelSelector(data.models);
+                } else {
+                    modelTableBody.innerHTML = '<tr><td colspan="6">暂无保存的模型</td></tr>';
+                }
+            } catch (err) {
+                modelListMsg.textContent = `错误：${err.message}`;
+                modelListMsg.className = 'error-msg';
+            }
+        }
+        
+        // 更新模型选择器
+        function updateModelSelector(models) {
+            const selector = document.getElementById('modelSelector');
+            selector.innerHTML = '<option value="">请选择模型</option>';
+            
+            if (models && models.length > 0) {
+                models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.model_filename;
+                    option.textContent = `${model.model_name || '未命名'} (${model.model_type || '未知'})`;
+                    selector.appendChild(option);
+                });
+            }
+        }
+        
+        // 删除模型
+        async function deleteModel(modelFilename) {
+            const confirmDelete = confirm(`确定要删除模型吗？`);
+            if (!confirmDelete) return;
+
+            try {
+                const response = await fetch(`/api/models/${encodeURIComponent(modelFilename)}`, { method: 'DELETE' });
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '删除失败');
+
+                alert('模型删除成功');
+                refreshModelList();
+            } catch (err) {
+                alert(`删除失败：${err.message}`);
+            }
+        }
+        
+        // 为模型应用刷新文件列表
+        async function refreshFileListForModel() {
+            const fileSelector = document.getElementById('dataFileSelector');
+            
+            try {
+                const response = await fetch('/api/files');
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '获取文件列表失败');
+
+                // 清空选项
+                fileSelector.innerHTML = '<option value="">请选择文件</option>';
+                
+                // 添加文件选项
+                data.files.forEach(file => {
+                    const option = document.createElement('option');
+                    option.value = file.name;
+                    option.textContent = file.name;
+                    fileSelector.appendChild(option);
+                });
+            } catch (err) {
+                console.error('刷新文件列表失败：', err.message);
+            }
+        }
+        
+        // 应用模型
+        async function applyModel() {
+            const modelSelector = document.getElementById('modelSelector');
+            const dataFileSelector = document.getElementById('dataFileSelector');
+            const modelFilename = modelSelector.value;
+            const filename = dataFileSelector.value;
+            const modelResult = document.getElementById('modelResult');
+            
+            modelResult.innerHTML = '';
+            
+            if (!modelFilename) {
+                modelResult.innerHTML = '<p class="error-msg">请选择模型</p>';
+                return;
+            }
+            
+            if (!filename) {
+                modelResult.innerHTML = '<p class="error-msg">请选择数据文件</p>';
+                return;
+            }
+            
+            modelResult.innerHTML = '<p>正在应用模型...</p>';
+            
+            try {
+                const response = await fetch(`/api/models/${encodeURIComponent(modelFilename)}/apply`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: filename })
+                });
+                
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || '应用模型失败');
+
+                if (data.success) {
+                    modelResult.innerHTML = `
+                        <div class="result-success">
+                            <h4>模型应用成功</h4>
+                            <p>预测结果已生成，共 ${data.predictions.length} 个预测值</p>
+                            <details>
+                                <summary>查看预测结果</summary>
+                                <pre>${JSON.stringify(data.predictions, null, 2)}</pre>
+                            </details>
+                        </div>
+                    `;
+                } else {
+                    modelResult.innerHTML = `<p class="error-msg">应用模型失败: ${data.error}</p>`;
+                }
+            } catch (err) {
+                modelResult.innerHTML = `<p class="error-msg">应用模型失败: ${err.message}</p>`;
+            }
+        }
+                // 显示目标列选择对话框
+        function showTargetColumnDialog() {
+            document.getElementById('targetColumnDialog').style.display = 'flex';
+        }
+        
+        // 关闭目标列选择对话框
+        function closeTargetColumnDialog() {
+            document.getElementById('targetColumnDialog').style.display = 'none';
+        }
+        
+        // 显示保存模型对话框
+        function showSaveModelDialog() {
+            document.getElementById('saveModelDialog').style.display = 'flex';
+        }
+        
+        // 关闭保存模型对话框
+        function closeSaveModelDialog() {
+            document.getElementById('saveModelDialog').style.display = 'none';
+        }
+
+                // 简单的Python代码高亮函数（备选方案）
+        function simplePythonHighlight(code) {
+            // 定义Python关键字
+            const keywords = [
+                'and', 'as', 'assert', 'break', 'class', 'continue', 'def', 'del', 'elif', 'else',
+                'except', 'exec', 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is',
+                'lambda', 'not', 'or', 'pass', 'print', 'raise', 'return', 'try', 'while', 'with', 'yield'
+            ];
+            
+            const builtins = [
+                'True', 'False', 'None', 'abs', 'all', 'any', 'bin', 'bool', 'bytearray', 'bytes',
+                'callable', 'chr', 'classmethod', 'compile', 'complex', 'delattr', 'dict', 'dir',
+                'divmod', 'enumerate', 'eval', 'execfile', 'file', 'filter', 'float', 'format',
+                'frozenset', 'getattr', 'globals', 'hasattr', 'hash', 'help', 'hex', 'id', 'input',
+                'int', 'isinstance', 'issubclass', 'iter', 'len', 'list', 'locals', 'long', 'map',
+                'max', 'min', 'next', 'object', 'oct', 'open', 'ord', 'pow', 'property', 'range',
+                'raw_input', 'reduce', 'reload', 'repr', 'reversed', 'round', 'set', 'setattr',
+                'slice', 'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'unichr',
+                'unicode', 'vars', 'xrange', 'zip', '__import__', 'apply', 'buffer', 'coerce', 'intern'
+            ];
+            
+            // 简单的高亮处理
+            let highlighted = code;
+            
+            // 高亮关键字
+            keywords.forEach(keyword => {
+                const regex = new RegExp('\\b' + keyword + '\\b', 'g');
+                highlighted = highlighted.replace(regex, `<span class="token keyword">${keyword}</span>`);
+            });
+            
+            // 高亮内置函数
+            builtins.forEach(builtin => {
+                const regex = new RegExp('\\b' + builtin + '\\b', 'g');
+                highlighted = highlighted.replace(regex, `<span class="token builtin">${builtin}</span>`);
+            });
+            
+            // 高亮字符串
+            highlighted = highlighted.replace(/(".*?")/g, '<span class="token string">$1</span>');
+            highlighted = highlighted.replace(/('.*?')/g, '<span class="token string">$1</span>');
+            
+            // 高亮注释
+            highlighted = highlighted.replace(/(#.*)/g, '<span class="token comment">$1</span>');
+            
+            // 高亮数字
+            highlighted = highlighted.replace(/\b(\d+)\b/g, '<span class="token number">$1</span>');
+            
+            return highlighted;
+        }
+                // 显示图表
+        function displayCharts(charts) {
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // 创建消息容器
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message agent-message';
+            messageDiv.style.backgroundColor = '#ffffff';
+            messageDiv.style.border = '1px solid #dadce0';
+            messageDiv.style.borderRadius = '8px';
+            messageDiv.style.padding = '16px';
+            messageDiv.style.marginBottom = '16px';
+            
+            // 添加标题
+            const title = document.createElement('h4');
+            title.textContent = '📊 数据可视化图表';
+            title.style.marginTop = '0';
+            title.style.marginBottom = '16px';
+            title.style.color = '#202124';
+            messageDiv.appendChild(title);
+            
+            // 创建图表容器
+            const chartsContainer = document.createElement('div');
+            chartsContainer.style.display = 'grid';
+            chartsContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(400px, 1fr))';
+            chartsContainer.style.gap = '16px';
+            chartsContainer.style.marginTop = '16px';
+            
+            // 显示直方图
+            if (charts.histogram) {
+                const chartDiv = document.createElement('div');
+                chartDiv.style.textAlign = 'center';
+                
+                const chartTitle = document.createElement('h5');
+                chartTitle.textContent = '数据分布直方图';
+                chartTitle.style.marginBottom = '8px';
+                chartDiv.appendChild(chartTitle);
+                
+                const img = document.createElement('img');
+                img.src = charts.histogram;
+                img.alt = '数据分布直方图';
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '4px';
+                chartDiv.appendChild(img);
+                
+                chartsContainer.appendChild(chartDiv);
+            }
+            
+            // 显示散点图
+            if (charts.scatter) {
+                const chartDiv = document.createElement('div');
+                chartDiv.style.textAlign = 'center';
+                
+                const chartTitle = document.createElement('h5');
+                chartTitle.textContent = '散点图';
+                chartTitle.style.marginBottom = '8px';
+                chartDiv.appendChild(chartTitle);
+                
+                const img = document.createElement('img');
+                img.src = charts.scatter;
+                img.alt = '散点图';
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '4px';
+                chartDiv.appendChild(img);
+                
+                chartsContainer.appendChild(chartDiv);
+            }
+            
+            // 显示箱线图
+            if (charts.box) {
+                const chartDiv = document.createElement('div');
+                chartDiv.style.textAlign = 'center';
+                
+                const chartTitle = document.createElement('h5');
+                chartTitle.textContent = '箱线图';
+                chartTitle.style.marginBottom = '8px';
+                chartDiv.appendChild(chartTitle);
+                
+                const img = document.createElement('img');
+                img.src = charts.box;
+                img.alt = '箱线图';
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '4px';
+                chartDiv.appendChild(img);
+                
+                chartsContainer.appendChild(chartDiv);
+            }
+            
+            // 显示相关性热力图
+            if (charts.correlation) {
+                const chartDiv = document.createElement('div');
+                chartDiv.style.textAlign = 'center';
+                
+                const chartTitle = document.createElement('h5');
+                chartTitle.textContent = '特征相关性热力图';
+                chartTitle.style.marginBottom = '8px';
+                chartDiv.appendChild(chartTitle);
+                
+                const img = document.createElement('img');
+                img.src = charts.correlation;
+                img.alt = '特征相关性热力图';
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '4px';
+                chartDiv.appendChild(img);
+                
+                chartsContainer.appendChild(chartDiv);
+            }
+            
+            messageDiv.appendChild(chartsContainer);
+            
+            // 添加时间戳
+            const timestamp = document.createElement('div');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString();
+            timestamp.style.marginTop = '12px';
+            timestamp.style.fontSize = '12px';
+            timestamp.style.color = '#5f6368';
+            
+            messageDiv.appendChild(timestamp);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>
